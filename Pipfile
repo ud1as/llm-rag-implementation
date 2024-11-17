@@ -1,0 +1,31 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+python-dotenv = "*"
+pinecone = "*"
+langchain = "*"
+openai = "*"
+pinecone-client = "*"
+tiktoken = "*"
+requests = "*"
+langchain-community = "*"
+transformers = "*"
+rouge-score = "*"
+torch = "*"
+scikit-learn = "*"
+weave = "*"
+ragas = "*"
+datasets = "*"
+tqdm = "*"
+sentence-transformers = "*"
+deepeval = "*"
+fastapi = "*"
+uvicorn = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"
