@@ -22,10 +22,8 @@ class RAGModel:
 
 def main():
     try:
-        # Initialize components
         vector_store = VectorStore()
         
-        # Process and store the transcription
         transcription = """
         Жасанды интеллект (ЖИ) бүгінгі күннің ең маңызды технологиялық жетістіктерінің бірі болып табылады. 
         Ол біздің күнделікті өмірімізде, жұмыста, медицинада, білім беру саласында, және өнеркәсіпте кеңінен қолданылуда. 
@@ -35,10 +33,8 @@ def main():
         """
         vector_store.process_and_store(transcription)
         
-        # Create RAG model
         rag_model = RAGModel(vector_store=vector_store, llm=KazLLM())
         
-        # Questions for evaluation
         eval_questions = [
             "Жасанды интеллект қандай салаларда қолданылады?",
             "ҮТМ дегеніміз не?",
@@ -46,11 +42,9 @@ def main():
             "Жасанды интеллект қандай мүмкіндіктер береді?"
         ]
         
-        # Run comparative evaluation
         print("=== Running Comparative Evaluation ===")
         results, report = evaluate_rag_system(rag_model, eval_questions)
         
-        # Print evaluation report
         print(report)
         
         return results

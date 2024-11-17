@@ -18,13 +18,12 @@ origins = [
 
 ]
 
-# Add CORS middleware to the app
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Allowed origins
-    allow_credentials=True,  # Allow cookies to be sent
-    allow_methods=["*"],  # Allow all HTTP methods
-    allow_headers=["*"],  # Allow all headers
+    allow_origins=origins,  
+    allow_credentials=True,  
+    allow_methods=["*"], 
+    allow_headers=["*"], 
 )
 try:
     vector_store = VectorStore()
@@ -100,10 +99,8 @@ def evaluate_rag_system_with_predefined_answers(rag_model: RAGModel, questions: 
     num_entries = len(questions)
 
     for question, expected_answer in zip(questions, answers):
-        # Get RAG's predicted answer
         prediction = rag_model.predict(question)
 
-        # Evaluate relevance, correctness, and fluency based on expected and actual answers
         scores = rag_model.evaluate_with_llm(
             question=question,
             context=prediction["context"],
@@ -138,25 +135,21 @@ async def evaluate_with_predefined(request: EvaluationRequestWithAnswers):
 
         for pair in request.question_answer_pairs:
             try:
-                # Get KazLLM response
                 prediction = rag_model.predict(pair.question)
 
-                # Evaluate using gpt-4o-mini
                 scores = comparator.compare_responses(
                     question=pair.question,
                     context=prediction["context"],
                     kazllm_answer=prediction["answer"],
                     gpt4_answer=pair.expected_answer
                 )
-
-                # Check if scores are valid
+                
                 if scores is not None:
                     total_relevance += scores.relevance_score
                     total_correctness += scores.correctness_score
                     total_fluency += scores.fluency_score
                     valid_entries += 1
 
-                    # Append individual results
                     results.append({
                         "question": pair.question,
                         "expected_answer": pair.expected_answer,
@@ -176,17 +169,14 @@ async def evaluate_with_predefined(request: EvaluationRequestWithAnswers):
                     "fluency_score": 0.0,
                 })
 
-        # If no valid entries were evaluated, return an error
         if valid_entries == 0:
             raise HTTPException(status_code=500, detail="No valid evaluations completed.")
 
-        # Calculate average metrics
         average_relevance = total_relevance / valid_entries
         average_correctness = total_correctness / valid_entries
         average_fluency = total_fluency / valid_entries
         overall_score = (average_relevance + average_correctness + average_fluency) / 3
 
-        # Return the metrics and individual results
         return {
             "results": results,
             "metrics": {
@@ -222,13 +212,10 @@ async def evaluate_text(request: EvaluationRequest):
     """
     try:
         try:
-            # Predict the answer and get the context
             prediction = rag_model.predict(request.question)
 
-            # Clean and format the context
             formatted_context = " ".join(prediction["context"].split())
 
-            # Return the result
             return {
                 "question": request.question,
                 "answer": prediction["answer"],
@@ -236,7 +223,6 @@ async def evaluate_text(request: EvaluationRequest):
             }
 
         except Exception as e:
-            # Handle prediction errors
             return {
                 "question": request.question,
                 "answer": f"Error generating answer: {str(e)}",
@@ -253,6 +239,5 @@ async def root():
     return {"message": "RAG System API is running."}
 
 
-# Add this block to start the server when app.py is run directly
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
