@@ -12,11 +12,10 @@ import uvicorn
 app = FastAPI()
 
 
-# Define allowed origins (e.g., "*" for all origins or specific domains)
+
 origins = [
-    "*",  # Allow all origins. Replace "*" with specific origins if needed.
-    # "http://localhost:3000",
-    # "https://example.com"
+    "*",  
+
 ]
 
 # Add CORS middleware to the app
@@ -137,7 +136,6 @@ async def evaluate_with_predefined(request: EvaluationRequestWithAnswers):
         valid_entries = 0  # Count only successfully evaluated entries
         results = []  # Store individual results with answers
 
-        # Iterate through question-answer pairs and evaluate
         for pair in request.question_answer_pairs:
             try:
                 # Get KazLLM response

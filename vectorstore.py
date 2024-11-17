@@ -12,8 +12,8 @@ class VectorStore:
         self.index = self.pc.Index(index_name)
         self.embeddings = OpenAIEmbeddings()
         self.text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=150,
-            chunk_overlap=30,
+            chunk_size=300,
+            chunk_overlap=80,
             length_function=len,
             separators=["\n\n", "\n", " ", ""]
         )

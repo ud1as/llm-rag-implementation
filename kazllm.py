@@ -36,7 +36,7 @@ class KazLLM:
                 "temperature": 0.7,
                 "max_tokens": 200,
                 "model": "KazLLM",
-                "system_instructions": "Answer questions based on the provided context",
+                "system_instructions": "Answer questions based on the provided context. Answer only using the context information.",
                 "context": ""
             }
             
@@ -58,8 +58,9 @@ class KazLLM:
     def generate_response(self, context, question):
         """Generate response using KazLLM with context."""
         try:
+            instruction = "Answer only based on the provided context. Do not include Жауап, ответ, answer. Just provide the answer that is it."
             payload = {
-                "text_prompt": question,
+                "text_prompt": f"{instruction}\n\nQuestion: {question}",
                 "context": context,
                 "file_prompt": None
             }
